@@ -1,0 +1,73 @@
+<!-- Background Elements -->
+<div class="aurora"></div>
+<div id="starfield"></div>
+<div class="warmth-overlay"></div>
+
+<!-- Audio Toggle Control -->
+<div id="audioToggle" class="audio-control" onclick="toggleRain()">🌧️ Suara Hujan: Off</div>
+
+<!-- Container Lips / Kisses Dynamic Overlay -->
+<div id="kissContainer"></div>
+
+<!-- Left Arm & Hand -->
+<div class="arm-wrapper left">
+    <div class="arm">
+        <svg class="hand-svg" viewBox="0 0 100 150">
+            <path d="M 10 75 C 10 40, 25 10, 45 10 C 52 10, 58 20, 55 35 C 52 50, 40 55, 40 65 C 40 70, 48 40, 62 30 C 68 25, 75 32, 70 45 C 65 58, 52 68, 50 78 C 50 82, 62 60, 75 52 C 82 48, 88 56, 82 68 C 75 82, 60 92, 58 100 C 56 105, 65 95, 72 92 C 78 89, 82 96, 76 105 C 68 118, 50 135, 30 138 C 15 140, 10 110, 10 75 Z" />
+        </svg>
+    </div>
+</div>
+
+<!-- Right Arm & Hand -->
+<div class="arm-wrapper right">
+    <div class="arm">
+        <svg class="hand-svg" viewBox="0 0 100 150">
+            <path d="M 10 75 C 10 40, 25 10, 45 10 C 52 10, 58 20, 55 35 C 52 50, 40 55, 40 65 C 40 70, 48 40, 62 30 C 68 25, 75 32, 70 45 C 65 58, 52 68, 50 78 C 50 82, 62 60, 75 52 C 82 48, 88 56, 82 68 C 75 82, 60 92, 58 100 C 56 105, 65 95, 72 92 C 78 89, 82 96, 76 105 C 68 118, 50 135, 30 138 C 15 140, 10 110, 10 75 Z" />
+        </svg>
+    </div>
+</div>
+
+<!-- Glassmorphic Card Container -->
+<div class="container glass-card">
+    <div id="message"></div>
+    <div id="timer"></div>
+    
+    <!-- Option Choice Buttons -->
+    <div id="choiceContainer" class="choice-container">
+        <button id="hugBtn" class="main-btn">🤍 Peluk Aku</button>
+        <button id="kissBtn" class="main-btn pink-btn">💋 Cium Aku</button>
+    </div>
+
+    <!-- Teleport Loading Screen -->
+    <div id="teleportBox" class="teleport-box">
+        <p id="teleportTitle">Menghapus jarak...</p>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="teleportPercent">0%</p>
+        <p id="teleportStatus" class="teleport-status"></p>
+    </div>
+
+    <!-- Final Letter Footer -->
+    <div id="finalSection" class="final-section">
+        <div class="sign-off">
+            <p>Love,</p>
+            <h3>Diw 🤍</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Easter Egg Footer -->
+<div class="footer-easter">
+    <button id="easterBtn" class="easter-btn">👀 Jangan dipencet</button>
+</div>
+
+<!-- Fullscreen Popups / Overlays for Easter Egg -->
+<div id="easterOverlay" class="easter-overlay">
+    <div id="easterContent" class="easter-content glass-card">
+        <h2 id="easterTitle">Kamu bandel ya.</h2>
+        <div id="easterVisual"></div>
+        <p id="easterText"></p>
+        <button id="easterActionBtn" class="main-btn">🤍 Peluk Lagi!!</button>
+    </div>
+</div>
