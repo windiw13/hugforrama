@@ -3,111 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>For Rama 🤍</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- Background -->
+    <!-- Dual Aurora Background -->
     <div class="aurora aurora-blue"></div>
     <div class="aurora aurora-purple"></div>
 
+    <!-- Starfield & Shooting Stars -->
     <div id="stars"></div>
-
-    <div class="shooting-star"></div>
 
     <!-- Mouse Glow -->
     <div class="mouse-glow"></div>
 
-
-    <!-- Opening Screen -->
+    <!-- Opening Screen (WA Style) -->
     <section class="opening" id="opening">
-
         <div class="typing-box">
-
-            <div class="avatar">
-                🤍
-            </div>
-
-            <p id="openingText">
-                Diw sedang mengetik...
-            </p>
-
+            <div class="avatar">🤍</div>
+            <p id="openingText">Diw sedang mengetik...</p>
             <div class="typing-dot">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-
         </div>
-
     </section>
 
-
-
-    <!-- Main Content -->
+    <!-- Main Card Container -->
     <main class="container" id="mainContent">
+        <section class="card hero-card" id="heroCard">
+            <h1>Untuk Rama 🤍</h1>
 
+            <!-- Dynamic Typewriter Box -->
+            <div class="message-container">
+                <p id="typewriterText" class="message"></p>
+            </div>
 
-        <section class="card hero-card">
+            <!-- Choice Buttons + Micro Text -->
+            <div id="choiceContainer" class="choice-container">
+                <div class="btn-group">
+                    <button class="apple-button hug-btn" id="hugBtn">🤍 Peluk Aku</button>
+                    <span class="micro-text">Klik kalau lagi butuh tempat pulang.</span>
+                </div>
 
-            <h1>
-                Untuk Rama 🤍
-            </h1>
+                <div class="btn-group">
+                    <button class="apple-button kiss-btn" id="kissBtn">💋 Cium Aku</button>
+                    <span class="micro-text">Klik kalau lagi pengen dimanja.</span>
+                </div>
+            </div>
 
-
-            <p class="message">
-                Ada seseorang yang ingin mengatakan sesuatu
-                lewat halaman kecil ini.
-            </p>
-
-
-            <button class="apple-button" id="startButton">
-                Buka Pesan ✨
-            </button>
-
-
+            <div class="footer-sign">
+                <p>Love,</p>
+                <h3>Diw 🤍</h3>
+            </div>
         </section>
-
-
-
-        <section class="card hidden-message">
-
-            <h2>
-                Terima kasih sudah hadir
-            </h2>
-
-
-            <p>
-                Mungkin tidak banyak yang bisa diberikan,
-                tapi ada seseorang yang selalu berharap
-                kamu baik-baik saja.
-            </p>
-
-
-        </section>
-
-
-
-        <!-- Sound -->
-        <button class="sound-button" id="soundButton">
-            🌧️ Hujan OFF
-        </button>
-
-
-        <audio id="rainSound" loop>
-            <source src="rain.mp3" type="audio/mpeg">
-        </audio>
-
-
     </main>
 
+    <!-- Floating Sound Button -->
+    <button class="sound-button" id="soundButton">🌧️ Suara Hujan OFF</button>
+    
+    <!-- Audio Element (Web Audio API Fallback & MP3 support) -->
+    <audio id="rainSound" loop>
+        <source src="rain.mp3" type="audio/mpeg">
+    </audio>
 
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>

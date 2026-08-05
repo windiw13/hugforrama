@@ -1,650 +1,335 @@
 /* =========================
-   GLOBAL
+   GLOBAL RESET & FONTS
 ========================= */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
-
 
 body {
-
     min-height: 100vh;
-    overflow: hidden;
-
-    font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-    background:
-    radial-gradient(circle at top,
-    #16234f,
-    #050816 60%);
-
-    color: white;
-
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background: #030712;
+    color: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
-
-
 
 /* =========================
-   BACKGROUND AURORA
+   BACKGROUND DUAL AURORA
 ========================= */
-
-
 .aurora {
-
     position: fixed;
-
-    width: 600px;
-    height: 600px;
-
+    width: 650px;
+    height: 650px;
     border-radius: 50%;
-
-    filter: blur(120px);
-
-    opacity: .55;
-
+    filter: blur(140px);
+    opacity: 0.45;
     z-index: -3;
-
-    animation:
-    auroraMove 12s infinite alternate ease-in-out;
-
+    pointer-events: none;
+    animation: auroraMove 16s infinite alternate ease-in-out;
 }
-
-
 
 .aurora-blue {
-
-    background:
-    #3b82f6;
-
-    top:-200px;
-    left:-150px;
-
+    background: #2563eb;
+    top: -200px;
+    left: -150px;
 }
-
-
 
 .aurora-purple {
-
-    background:
-    #a855f7;
-
-    right:-150px;
-    bottom:-200px;
-
-    animation-delay:3s;
-
+    background: #9333ea;
+    right: -150px;
+    bottom: -200px;
+    animation-delay: 4s;
 }
-
-
 
 @keyframes auroraMove {
-
-
-    from {
-
-        transform:
-        translate(0,0)
-        scale(1);
-
-    }
-
-
-    to {
-
-        transform:
-        translate(80px,60px)
-        scale(1.2);
-
-    }
-
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(100px, 80px) scale(1.25); }
 }
-
-
-
 
 /* =========================
-   STARS
+   STARS & SHOOTING STARS
 ========================= */
-
-
 #stars {
-
     position: fixed;
-
-    inset:0;
-
-    z-index:-2;
-
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
 }
-
-
 
 .star {
-
-    position:absolute;
-
-    width:2px;
-    height:2px;
-
-    background:white;
-
-    border-radius:50%;
-
-    animation:
-    twinkle 3s infinite;
-
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite ease-in-out;
 }
-
-
 
 @keyframes twinkle {
-
-
-    0%,100%{
-
-        opacity:.2;
-
-    }
-
-
-    50%{
-
-        opacity:1;
-
-    }
-
+    0%, 100% { opacity: 0.15; transform: scale(0.8); }
+    50% { opacity: 0.9; transform: scale(1.2); }
 }
-
-
-
-/* =========================
- SHOOTING STAR
-========================= */
-
 
 .shooting-star {
-
-
-    position:fixed;
-
-    width:150px;
-
-    height:2px;
-
-    background:
-    linear-gradient(
-    90deg,
-    transparent,
-    white);
-
-    top:20%;
-    left:-200px;
-
-
-    animation:
-    shooting 8s infinite;
-
-
+    position: fixed;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    animation: shooting 2.5s ease-in-out forwards;
+    z-index: -1;
+    pointer-events: none;
 }
-
-
 
 @keyframes shooting {
-
-
-    0% {
-
-        transform:
-        translateX(0)
-        rotate(-30deg);
-
-        opacity:0;
-
-    }
-
-
-    10% {
-
-        opacity:1;
-
-    }
-
-
-
-    30% {
-
-        transform:
-        translateX(120vw)
-        rotate(-30deg);
-
-        opacity:0;
-
-    }
-
-
-    100%{
-
-        opacity:0;
-
-    }
-
+    0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; width: 0px; }
+    30% { width: 120px; }
+    100% { transform: translateX(-400px) translateY(400px) rotate(-35deg); opacity: 0; width: 0px; }
 }
 
-
-
 /* =========================
- MOUSE GLOW
+   MOUSE GLOW
 ========================= */
-
-
 .mouse-glow {
-
-
-    position:fixed;
-
-    width:250px;
-
-    height:250px;
-
-    border-radius:50%;
-
-    background:
-    rgba(255,255,255,.12);
-
-    filter:blur(50px);
-
-    pointer-events:none;
-
-    transform:
-    translate(-50%,-50%);
-
-
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.12);
+    filter: blur(60px);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    transition: left 0.1s ease-out, top 0.1s ease-out;
 }
-
-
 
 /* =========================
- OPENING
+   OPENING SCREEN (WA STYLE)
 ========================= */
-
-
 .opening {
-
-
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-
-    background:
-    rgba(5,8,22,.95);
-
-    z-index:20;
-
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(3, 7, 18, 0.96);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
 }
-
-
 
 .typing-box {
-
-
-    text-align:center;
-
+    text-align: center;
+    padding: 20px;
 }
-
-
 
 .avatar {
-
-    font-size:60px;
-
-    margin-bottom:20px;
-
-    animation:
-    floating 3s infinite;
-
+    font-size: 55px;
+    margin-bottom: 15px;
+    animation: floating 3s infinite ease-in-out;
 }
-
-
 
 #openingText {
-
-
-    font-size:24px;
-
-    letter-spacing:1px;
-
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-
+.typing-dot {
+    margin-top: 10px;
+}
 
 .typing-dot span {
-
-
-    display:inline-block;
-
-    width:8px;
-
-    height:8px;
-
-    background:white;
-
-    border-radius:50%;
-
-    margin:10px 3px;
-
-    animation:
-    dot 1.4s infinite;
-
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+    margin: 0 3px;
+    animation: dot 1.4s infinite ease-in-out;
 }
 
-
-.typing-dot span:nth-child(2){
-
-    animation-delay:.2s;
-
-}
-
-
-.typing-dot span:nth-child(3){
-
-    animation-delay:.4s;
-
-}
-
-
+.typing-dot span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes dot {
-
-
-    50%{
-
-        transform:
-        translateY(-8px);
-
-    }
-
+    0%, 100% { transform: translateY(0); opacity: 0.3; }
+    50% { transform: translateY(-7px); opacity: 1; }
 }
-
-
 
 @keyframes floating {
-
-
-    50%{
-
-        transform:
-        translateY(-15px);
-
-    }
-
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
 }
-
-
-
-
 
 /* =========================
- MAIN
+   MAIN GLASS CARD
 ========================= */
-
-
 .container {
-
-
-    min-height:100vh;
-
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:30px;
-
-
-    padding:30px;
-
-
+    width: 90%;
+    max-width: 520px;
+    padding: 20px 0;
+    z-index: 10;
 }
-
-
-
 
 .card {
-
-
-    width:420px;
-
-    min-height:300px;
-
-
-    padding:50px;
-
-
-    border-radius:30px;
-
-
-    background:
-    rgba(255,255,255,.08);
-
-
-    border:
-    1px solid
-    rgba(255,255,255,.2);
-
-
-    backdrop-filter:
-    blur(20px);
-
-
-    box-shadow:
-    0 20px 60px
-    rgba(0,0,0,.35);
-
-
-    animation:
-    cardIn 1.5s ease;
-
-
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 32px;
+    padding: 45px 30px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
-
-
-@keyframes cardIn {
-
-
-    from {
-
-        opacity:0;
-
-        transform:
-        translateY(50px);
-
-    }
-
-
-    to {
-
-        opacity:1;
-
-        transform:
-        translateY(0);
-
-    }
-
-
+.card.show {
+    opacity: 1;
+    transform: translateY(0);
 }
-
-
-
-
-.hero-card {
-
-
-    text-align:center;
-
-}
-
-
 
 .hero-card h1 {
-
-
-    font-size:42px;
-
-    margin-bottom:25px;
-
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
 }
 
-
+.message-container {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
 
 .message {
-
-
-    line-height:1.8;
-
-    font-size:18px;
-
-    opacity:.9;
-
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.9);
+    transition: opacity 0.8s ease;
 }
 
-
+.fade-out {
+    opacity: 0 !important;
+}
 
 /* =========================
- BUTTON
+   BUTTONS & MICRO TEXT
 ========================= */
+.choice-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+    transition: opacity 1s ease, transform 1s ease;
+}
 
+.choice-container.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
 
 .apple-button {
-
-
-    margin-top:35px;
-
-
-    padding:
-
-    16px 40px;
-
-
-    border:none;
-
-
-    border-radius:50px;
-
-
-    background:white;
-
-
-    color:#14213d;
-
-
-    font-size:16px;
-
-
-    cursor:pointer;
-
-
-    transition:.3s;
-
-
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 50px;
+    background: #ffffff;
+    color: #0b1329;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
-
 
 .apple-button:hover {
-
-
-    transform:
-    translateY(-5px)
-    scale(1.05);
-
-
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
 }
 
-
-
-
-
-.sound-button {
-
-
-    position:fixed;
-
-
-    right:30px;
-
-    bottom:30px;
-
-
-    padding:15px 25px;
-
-
-    border-radius:50px;
-
-
-    border:none;
-
-
-    background:white;
-
-
-    color:#14213d;
-
-
-    cursor:pointer;
-
-
+.kiss-btn {
+    background: #ffb3d9;
+    color: #4a0026;
 }
 
-
-
+.micro-text {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 300;
+    line-height: 1.3;
+}
 
 /* =========================
- MOBILE
+   FOOTER & SOUND BUTTON
 ========================= */
-
-
-@media(max-width:900px){
-
-
-.container{
-
-
-    flex-direction:column;
-
+.footer-sign {
+    margin-top: 35px;
+    opacity: 0.5;
+    font-size: 0.85rem;
+    transition: opacity 0.5s ease;
 }
 
-
-
-.card{
-
-
-    width:90%;
-
+.footer-sign:hover {
+    opacity: 0.85;
 }
 
-
-.hero-card h1{
-
-    font-size:32px;
-
+.footer-sign h3 {
+    font-weight: 500;
+    margin-top: 2px;
 }
 
+.sound-button {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    color: #ffffff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    z-index: 50;
+    transition: all 0.3s ease;
+}
 
+.sound-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+    .card { padding: 35px 22px; }
+    .hero-card h1 { font-size: 1.6rem; }
+    .message { font-size: 1rem; }
+    .choice-container { flex-direction: column; gap: 20px; }
+    .btn-group { width: 100%; }
 }
