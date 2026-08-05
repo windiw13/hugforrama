@@ -8,15 +8,31 @@
 </head>
 <body>
 
-    <!-- Dual Aurora Background -->
+    <!-- Background Elements -->
     <div class="aurora aurora-blue"></div>
     <div class="aurora aurora-purple"></div>
-
-    <!-- Starfield & Shooting Stars -->
+    <div class="warmth-overlay"></div>
     <div id="stars"></div>
-
-    <!-- Mouse Glow -->
     <div class="mouse-glow"></div>
+
+    <!-- Kiss Marks Container -->
+    <div id="kissContainer"></div>
+
+    <!-- Arms Animation Overlay (Hug Scene) -->
+    <div class="arm-wrapper left">
+        <div class="arm">
+            <svg class="hand-svg" viewBox="0 0 100 150">
+                <path d="M 10 75 C 10 40, 25 10, 45 10 C 52 10, 58 20, 55 35 C 52 50, 40 55, 40 65 C 40 70, 48 40, 62 30 C 68 25, 75 32, 70 45 C 65 58, 52 68, 50 78 C 50 82, 62 60, 75 52 C 82 48, 88 56, 82 68 C 75 82, 60 92, 58 100 C 56 105, 65 95, 72 92 C 78 89, 82 96, 76 105 C 68 118, 50 135, 30 138 C 15 140, 10 110, 10 75 Z" />
+            </svg>
+        </div>
+    </div>
+    <div class="arm-wrapper right">
+        <div class="arm">
+            <svg class="hand-svg" viewBox="0 0 100 150">
+                <path d="M 10 75 C 10 40, 25 10, 45 10 C 52 10, 58 20, 55 35 C 52 50, 40 55, 40 65 C 40 70, 48 40, 62 30 C 68 25, 75 32, 70 45 C 65 58, 52 68, 50 78 C 50 82, 62 60, 75 52 C 82 48, 88 56, 82 68 C 75 82, 60 92, 58 100 C 56 105, 65 95, 72 92 C 78 89, 82 96, 76 105 C 68 118, 50 135, 30 138 C 15 140, 10 110, 10 75 Z" />
+            </svg>
+        </div>
+    </div>
 
     <!-- Opening Screen (WA Style) -->
     <section class="opening" id="opening">
@@ -31,17 +47,20 @@
         </div>
     </section>
 
-    <!-- Main Card Container -->
+    <!-- Main Content Container -->
     <main class="container" id="mainContent">
         <section class="card hero-card" id="heroCard">
             <h1>Untuk Rama 🤍</h1>
 
-            <!-- Dynamic Typewriter Box -->
+            <!-- Dynamic Message Container -->
             <div class="message-container">
                 <p id="typewriterText" class="message"></p>
             </div>
 
-            <!-- Choice Buttons + Micro Text -->
+            <!-- Hug Countdown Timer -->
+            <div id="timer"></div>
+
+            <!-- Choice Buttons -->
             <div id="choiceContainer" class="choice-container">
                 <div class="btn-group">
                     <button class="apple-button hug-btn" id="hugBtn">🤍 Peluk Aku</button>
@@ -54,17 +73,33 @@
                 </div>
             </div>
 
-            <div class="footer-sign">
-                <p>Love,</p>
-                <h3>Diw 🤍</h3>
+            <!-- Final Letter Sign-off -->
+            <div id="finalSection" class="final-section">
+                <div class="footer-sign">
+                    <p>Love,</p>
+                    <h3>Diw 🤍</h3>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Floating Sound Button -->
+    <!-- Easter Egg Footer -->
+    <div class="footer-easter">
+        <button id="easterBtn" class="easter-btn">👀 Jangan dipencet</button>
+    </div>
+
+    <!-- Easter Egg Popup Overlay -->
+    <div id="easterOverlay" class="easter-overlay">
+        <div id="easterContent" class="easter-content card">
+            <h2 id="easterTitle">Kamu bandel ya.</h2>
+            <div id="easterVisual"></div>
+            <p id="easterText"></p>
+            <button id="easterActionBtn" class="apple-button">🤍 Peluk Lagi!!</button>
+        </div>
+    </div>
+
+    <!-- Floating Rain Sound Button -->
     <button class="sound-button" id="soundButton">🌧️ Suara Hujan OFF</button>
-    
-    <!-- Audio Element (Web Audio API Fallback & MP3 support) -->
     <audio id="rainSound" loop>
         <source src="rain.mp3" type="audio/mpeg">
     </audio>

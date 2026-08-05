@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+    document.title = "For Rama 🤍";
+
     // 1. GENERATE 300 STARS AUTOMATICALLY
     const starsContainer = document.getElementById("stars");
     if (starsContainer) {
@@ -17,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 2. ELEGANT SHOOTING STAR LOOP (EVERY 12-18 SECONDS)
+    // 2. SHOOTING STARS LOOP
     function spawnShootingStar() {
         const shootingStar = document.createElement("div");
         shootingStar.className = "shooting-star";
@@ -26,9 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(shootingStar);
         setTimeout(() => shootingStar.remove(), 2500);
     }
-    setInterval(spawnShootingStar, 14000);
+    setInterval(spawnShootingStar, 12000);
 
-    // 3. MOUSE GLOW EFFECT
+    // 3. MOUSE GLOW
     const mouseGlow = document.querySelector(".mouse-glow");
     if (mouseGlow) {
         window.addEventListener("mousemove", (e) => {
@@ -37,67 +39,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 4. TYPEWRITER PER KALIMAT (EMOSIONAL & PERSONAL)
-    const openingScreen = document.getElementById("opening");
-    const heroCard = document.getElementById("heroCard");
-    const typewriterText = document.getElementById("typewriterText");
+    // DOM Elements
+    const msgEl = document.getElementById("typewriterText");
     const choiceContainer = document.getElementById("choiceContainer");
+    const hugBtn = document.getElementById("hugBtn");
+    const kissBtn = document.getElementById("kissBtn");
+    const timerEl = document.getElementById("timer");
+    const finalSection = document.getElementById("finalSection");
+    const kissContainer = document.getElementById("kissContainer");
 
-    const sentences = [
-        "Hai, Rama. 🤍",
-        "Hari ini mungkin cukup berat ya.",
-        "Aku memang nggak bisa selalu ada di samping kamu.",
-        "Tapi aku mau nemenin kamu sebentar.",
-        "Pilih yang kamu butuhin sekarang. 🤍"
-    ];
-
-    function showSentence(text, duration) {
-        return new Promise((resolve) => {
-            if (!typewriterText) return resolve();
-            typewriterText.classList.add("fade-out");
-            setTimeout(() => {
-                typewriterText.innerHTML = text;
-                typewriterText.classList.remove("fade-out");
-                setTimeout(resolve, duration);
-            }, 800);
-        });
-    }
-
-    async function startSequence() {
-        // Step A: Hide Opening Overlay
-        if (openingScreen) {
-            openingScreen.style.opacity = "0";
-            openingScreen.style.visibility = "hidden";
-            setTimeout(() => { openingScreen.style.display = "none"; }, 1200);
-        }
-
-        // Step B: Fade In Card
-        if (heroCard) {
-            heroCard.classList.add("show");
-        }
-
-        // Step C: Run Typewriter Sentences One by One
-        await new Promise(r => setTimeout(r, 600));
-        for (let i = 0; i < sentences.length; i++) {
-            const delay = i === sentences.length - 1 ? 1200 : 2500;
-            await showSentence(sentences[i], delay);
-        }
-
-        // Step D: Show Choice Buttons with Micro Text
-        if (choiceContainer) {
-            choiceContainer.classList.add("show");
-        }
-    }
-
-    // Start opening transition after 2 seconds
-    setTimeout(startSequence, 2000);
-
-    // 5. AUDIO RAIN CONTROL (WEB AUDIO API + FALLBACK)
+    // Audio Context Setup (Rain & Heartbeat)
+    let audioCtx = null, rainGain = null, heartbeatInterval = null, isPlaying = false;
     const soundButton = document.getElementById("soundButton");
     const rainSound = document.getElementById("rainSound");
-    let audioCtx = null, rainGain = null, isPlaying = false;
 
-    function initWebAudioRain() {
+    function initAudio() {
         if (audioCtx) return;
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
@@ -124,49 +80,272 @@ document.addEventListener("DOMContentLoaded", () => {
         whiteNoise.start();
     }
 
-    if (soundButton) {
-        soundButton.addEventListener("click", () => {
-            if (!isPlaying) {
-                // Try playing MP3 file first if available, else synthesized soft rain
-                if (rainSound) {
-                    rainSound.play().then(() => {
-                        soundButton.innerHTML = "🌧️ Suara Hujan ON";
-                        soundButton.style.background = "rgba(59, 130, 246, 0.4)";
-                        isPlaying = true;
-                    }).catch(() => {
-                        // Fallback to Web Audio Synthesizer
-                        initWebAudioRain();
-                        if (audioCtx.state === 'suspended') audioCtx.resume();
-                        rainGain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2);
-                        soundButton.innerHTML = "🌧️ Suara Hujan ON";
-                        soundButton.style.background = "rgba(59, 130, 246, 0.4)";
-                        isPlaying = true;
-                    });
-                }
-            } else {
-                if (rainSound) rainSound.pause();
-                if (rainGain && audioCtx) {
-                    rainGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-                }
-                soundButton.innerHTML = "🌧️ Suara Hujan OFF";
-                soundButton.style.background = "rgba(255, 255, 255, 0.08)";
-                isPlaying = false;
+    function playHeartbeatSound() {
+        if (!audioCtx) return;
+        const playThump = (freq, time, duration) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, time);
+            osc.frequency.exponentialRampToValueAtTime(20, time + duration);
+            gain.gain.setValueAtTime(0.09, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            osc.stop(time + duration);
+        };
+        const now = audioCtx.currentTime;
+        playThump(58, now, 0.18);
+        playThump(48, now + 0.22, 0.22);
+    }
+
+    function toggleRain() {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        if (!isPlaying) {
+            if (rainSound) {
+                rainSound.play().then(() => {
+                    soundButton.innerHTML = "🌧️ Suara Hujan ON";
+                    soundButton.style.background = "rgba(59, 130, 246, 0.4)";
+                    isPlaying = true;
+                }).catch(() => {
+                    rainGain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2);
+                    soundButton.innerHTML = "🌧️ Suara Hujan ON";
+                    soundButton.style.background = "rgba(59, 130, 246, 0.4)";
+                    isPlaying = true;
+                });
             }
+        } else {
+            if (rainSound) rainSound.pause();
+            if (rainGain && audioCtx) rainGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            soundButton.innerHTML = "🌧️ Suara Hujan OFF";
+            soundButton.style.background = "rgba(255, 255, 255, 0.08)";
+            isPlaying = false;
+        }
+    }
+
+    if (soundButton) soundButton.onclick = toggleRain;
+
+    function showText(text, duration) {
+        return new Promise((resolve) => {
+            if (!msgEl) return resolve();
+            msgEl.classList.add("fade-out");
+            setTimeout(() => {
+                msgEl.innerHTML = text;
+                msgEl.classList.remove("fade-out");
+                setTimeout(resolve, duration);
+            }, 800);
         });
     }
 
-    // Temporary Alert for Build 2 Transition
-    const hugBtn = document.getElementById("hugBtn");
-    const kissBtn = document.getElementById("kissBtn");
+    function triggerVibration() {
+        if (navigator.vibrate) navigator.vibrate([180]);
+    }
 
+    function spawnFloatingHeart() {
+        const h = document.createElement("div");
+        h.className = "floating-heart";
+        h.innerHTML = "🤍";
+        h.style.left = `${Math.random() * 80 + 10}%`;
+        h.style.bottom = "20%";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+    }
+
+    function spawnKiss(x, y) {
+        const kiss = document.createElement("div");
+        kiss.className = "kiss-mark";
+        kiss.innerHTML = "💋";
+        kiss.style.left = x + "%";
+        kiss.style.top = y + "%";
+        kissContainer.appendChild(kiss);
+        setTimeout(() => kiss.remove(), 2000);
+    }
+
+    // 4. OPENING TYPEWRITER SEQUENCE
+    const openingScreen = document.getElementById("opening");
+    const heroCard = document.getElementById("heroCard");
+    const introSentences = [
+        "Hai, Rama. 🤍",
+        "Hari ini mungkin cukup berat ya.",
+        "Aku memang nggak bisa selalu ada di samping kamu.",
+        "Tapi aku mau nemenin kamu sebentar.",
+        "Pilih yang kamu butuhin sekarang. 🤍"
+    ];
+
+    async function startIntroSequence() {
+        if (openingScreen) {
+            openingScreen.style.opacity = "0";
+            openingScreen.style.visibility = "hidden";
+            setTimeout(() => { openingScreen.style.display = "none"; }, 1200);
+        }
+
+        if (heroCard) heroCard.classList.add("show");
+        await new Promise(r => setTimeout(r, 600));
+
+        for (let i = 0; i < introSentences.length; i++) {
+            const delay = i === introSentences.length - 1 ? 1200 : 2500;
+            await showText(introSentences[i], delay);
+        }
+
+        if (choiceContainer) choiceContainer.classList.add("show");
+    }
+
+    setTimeout(startIntroSequence, 2000);
+
+    // 5. BUILD 2: HUG SCENE LOGIC
     if (hugBtn) {
-        hugBtn.onclick = () => {
-            alert("Siap-siap untuk Build 2: Mode Pelukan Suasana Hangat! 🤍");
+        hugBtn.onclick = async function() {
+            choiceContainer.classList.remove("show");
+            if (!isPlaying) toggleRain();
+
+            await showText("Mendekat ya...", 1000);
+
+            document.body.classList.add("hugging");
+            triggerVibration();
+
+            setTimeout(() => {
+                playHeartbeatSound();
+                heartbeatInterval = setInterval(playHeartbeatSound, 2800);
+            }, 2500);
+
+            const hugTexts = [
+                "Sini...",
+                "Gapapa.",
+                "Hari ini kamu udah hebat.",
+                "Istirahat dulu ya.",
+                "Aku peluk yang erat. 🤍"
+            ];
+
+            let count = 20;
+            timerEl.innerHTML = `Pelukan... ${count} detik`;
+            const heartSpawner = setInterval(spawnFloatingHeart, 1500);
+
+            const cd = setInterval(() => {
+                count--;
+                if (count >= 0) timerEl.innerHTML = `Pelukan... ${count} detik`;
+            }, 1000);
+
+            for (let t of hugTexts) {
+                await showText(t, 3500);
+            }
+
+            await new Promise(r => setTimeout(r, (count + 1) * 1000));
+
+            clearInterval(cd);
+            clearInterval(heartSpawner);
+            clearInterval(heartbeatInterval);
+            triggerVibration();
+
+            document.body.classList.remove("hugging");
+            timerEl.innerHTML = "";
+
+            await showText("Udah agak mendingan?", 2000);
+            await showText("Kalau belum...", 1800);
+            await showText("Aku masih di sini. 🤍", 1000);
+
+            hugBtn.innerHTML = "🤍 Peluk Lagi";
+            choiceContainer.classList.add("show");
+            runFinalLetter();
         };
     }
+
+    // 6. BUILD 2: KISS SCENE LOGIC (REVISI: TANPA TELEPORT)
     if (kissBtn) {
-        kissBtn.onclick = () => {
-            alert("Siap-siap untuk Build 2: Mode Ciuman Virtual! 💋");
+        kissBtn.onclick = async function() {
+            choiceContainer.classList.remove("show");
+            document.body.classList.add("pink-bg");
+
+            await showText("Tutup mata bentar ya... 💋", 2000);
+
+            spawnKiss(30, 40);
+            await new Promise(r => setTimeout(r, 800));
+            spawnKiss(70, 40);
+
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    spawnKiss(Math.random() * 80 + 10, Math.random() * 80 + 10);
+                }, i * 180);
+            }
+
+            const kissTexts = [
+                "Muah.",
+                "Muah lagi.",
+                "Bonus satu lagi buat hari ini. 🤍",
+                "Semoga hangatnya nyampe ke kamu ya. 💋"
+            ];
+            for (let kt of kissTexts) {
+                await showText(kt, 2200);
+            }
+
+            document.body.classList.remove("pink-bg");
+            kissBtn.innerHTML = "💋 Cium Lagi";
+            choiceContainer.classList.add("show");
+            runFinalLetter();
+        };
+    }
+
+    // 7. BUILD 2: FINAL LETTER
+    async function runFinalLetter() {
+        const letterTexts = [
+            "Rama...",
+            "Makasih ya...",
+            "Udah bertahan sejauh ini.",
+            "Aku bangga sama kamu.",
+            "Kamu nggak harus kuat setiap saat.",
+            "Kalau capek...",
+            "Pulang aja ke sini.",
+            "Aku selalu ada. ❤️"
+        ];
+
+        for (let lt of letterTexts) {
+            await showText(lt, 2600);
+        }
+
+        msgEl.innerHTML = "";
+        finalSection.classList.add("show");
+    }
+
+    // 8. BUILD 2: EASTER EGG MULTI-STAGE
+    const easterBtn = document.getElementById("easterBtn");
+    const easterOverlay = document.getElementById("easterOverlay");
+    const easterTitle = document.getElementById("easterTitle");
+    const easterVisual = document.getElementById("easterVisual");
+    const easterText = document.getElementById("easterText");
+    const easterActionBtn = document.getElementById("easterActionBtn");
+
+    let easterStage = 0;
+
+    if (easterBtn) {
+        easterBtn.onclick = () => {
+            easterStage = 1;
+            easterTitle.innerHTML = "Kamu bandel ya.";
+            easterVisual.innerHTML = "";
+            easterText.innerHTML = "";
+            easterActionBtn.innerHTML = "🤍 Peluk Lagi!!";
+            easterOverlay.classList.add("active");
+        };
+    }
+
+    if (easterActionBtn) {
+        easterActionBtn.onclick = () => {
+            if (easterStage === 1) {
+                easterStage = 2;
+                easterTitle.innerHTML = "Peluknya Nggak Ada Batas 🤍";
+                easterVisual.innerHTML = "🤍🤍🤍🤍🤍🤍🤍🤍<br>🤍🤍🤍🤍🤍🤍🤍🤍";
+                easterText.innerHTML = "Selama kamu butuh, selama itu juga aku ada.";
+                easterActionBtn.innerHTML = "Masih Mau Cium? 💋";
+            } else if (easterStage === 2) {
+                easterStage = 3;
+                easterTitle.innerHTML = "Yaudah deh... 💋";
+                easterVisual.innerHTML = "💋💋💋💋💋💋💋💋<br>💋💋💋💋💋💋💋💋";
+                easterText.innerHTML = "Bonus 1000 cium buat Rama. Jangan protes ya. 😂🤍";
+                easterActionBtn.innerHTML = "Tutup 🤍";
+            } else {
+                easterOverlay.classList.remove("active");
+            }
         };
     }
 });

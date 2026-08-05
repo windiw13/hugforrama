@@ -1,5 +1,5 @@
 /* =========================
-   GLOBAL RESET & FONTS
+   GLOBAL RESET & BASE
 ========================= */
 * {
     margin: 0;
@@ -20,10 +20,15 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
+    transition: background 3s ease;
+}
+
+body.pink-bg {
+    background: linear-gradient(180deg, #2d0b1e 0%, #4a1532 50%, #2b081b 100%);
 }
 
 /* =========================
-   BACKGROUND DUAL AURORA
+   AURORA & AMBIENT
 ========================= */
 .aurora {
     position: fixed;
@@ -37,22 +42,33 @@ body {
     animation: auroraMove 16s infinite alternate ease-in-out;
 }
 
-.aurora-blue {
-    background: #2563eb;
-    top: -200px;
-    left: -150px;
-}
-
-.aurora-purple {
-    background: #9333ea;
-    right: -150px;
-    bottom: -200px;
-    animation-delay: 4s;
-}
+.aurora-blue { background: #2563eb; top: -200px; left: -150px; }
+.aurora-purple { background: #9333ea; right: -150px; bottom: -200px; animation-delay: 4s; }
 
 @keyframes auroraMove {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(100px, 80px) scale(1.25); }
+}
+
+.warmth-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 200, 150, 0.08) 0%, rgba(20, 10, 5, 0.25) 100%);
+    opacity: 0;
+    transition: opacity 3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+body.hugging .warmth-overlay { opacity: 1; }
+
+body.hugging .container {
+    animation: breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
 }
 
 /* =========================
@@ -93,9 +109,7 @@ body {
     100% { transform: translateX(-400px) translateY(400px) rotate(-35deg); opacity: 0; width: 0px; }
 }
 
-/* =========================
-   MOUSE GLOW
-========================= */
+/* Mouse Glow */
 .mouse-glow {
     position: fixed;
     width: 280px;
@@ -106,11 +120,10 @@ body {
     pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: -1;
-    transition: left 0.1s ease-out, top 0.1s ease-out;
 }
 
 /* =========================
-   OPENING SCREEN (WA STYLE)
+   OPENING SCREEN
 ========================= */
 .opening {
     position: fixed;
@@ -124,38 +137,16 @@ body {
     transition: opacity 1.2s ease, visibility 1.2s ease;
 }
 
-.typing-box {
-    text-align: center;
-    padding: 20px;
-}
+.typing-box { text-align: center; padding: 20px; }
+.avatar { font-size: 55px; margin-bottom: 15px; animation: floating 3s infinite ease-in-out; }
 
-.avatar {
-    font-size: 55px;
-    margin-bottom: 15px;
-    animation: floating 3s infinite ease-in-out;
-}
+#openingText { font-size: 1.15rem; font-weight: 300; letter-spacing: 0.5px; color: rgba(255, 255, 255, 0.9); }
 
-#openingText {
-    font-size: 1.15rem;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.typing-dot {
-    margin-top: 10px;
-}
-
+.typing-dot { margin-top: 10px; }
 .typing-dot span {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    background: white;
-    border-radius: 50%;
-    margin: 0 3px;
-    animation: dot 1.4s infinite ease-in-out;
+    display: inline-block; width: 7px; height: 7px; background: white;
+    border-radius: 50%; margin: 0 3px; animation: dot 1.4s infinite ease-in-out;
 }
-
 .typing-dot span:nth-child(2) { animation-delay: 0.2s; }
 .typing-dot span:nth-child(3) { animation-delay: 0.4s; }
 
@@ -170,13 +161,14 @@ body {
 }
 
 /* =========================
-   MAIN GLASS CARD
+   MAIN CARD & LAYOUT
 ========================= */
 .container {
     width: 90%;
     max-width: 520px;
     padding: 20px 0;
     z-index: 10;
+    transition: transform 0.5s ease;
 }
 
 .card {
@@ -193,24 +185,15 @@ body {
     transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
-.card.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.hero-card h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    letter-spacing: -0.5px;
-}
+.card.show { opacity: 1; transform: translateY(0); }
+.hero-card h1 { font-size: 2rem; font-weight: 600; margin-bottom: 20px; }
 
 .message-container {
-    min-height: 100px;
+    min-height: 95px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .message {
@@ -221,8 +204,82 @@ body {
     transition: opacity 0.8s ease;
 }
 
-.fade-out {
-    opacity: 0 !important;
+.fade-out { opacity: 0 !important; }
+
+#timer {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 15px;
+    min-height: 20px;
+}
+
+/* =========================
+   ARMS ANIMATION (HUG)
+========================= */
+.arm-wrapper {
+    position: fixed;
+    top: 0;
+    width: 55%;
+    height: 100%;
+    transition: transform 3s cubic-bezier(0.37, 0, 0.63, 1);
+    z-index: 20;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.arm-wrapper.left { left: -55%; justify-content: flex-end; }
+.arm-wrapper.right { right: -55%; justify-content: flex-start; }
+
+.arm {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 225, 205, 0.1) 0%, rgba(255, 210, 185, 0.03) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.left .arm { border-radius: 0 180px 180px 0; border-left: none; }
+.right .arm { border-radius: 180px 0 0 180px; border-right: none; }
+
+.hand-svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 75px;
+    height: 120px;
+    fill: rgba(255, 230, 210, 0.15);
+}
+
+.left .hand-svg { right: 15px; transform: translateY(-50%) rotate(-5deg); }
+.right .hand-svg { left: 15px; transform: translateY(-50%) scaleX(-1) rotate(-5deg); }
+
+body.hugging .arm-wrapper.left { transform: translateX(92%); }
+body.hugging .arm-wrapper.right { transform: translateX(-92%); }
+
+/* =========================
+   DYNAMIC OVERLAYS & FLOATING
+========================= */
+.kiss-mark {
+    position: fixed; font-size: 2.2rem; pointer-events: none;
+    animation: popKiss 2s ease forwards; z-index: 35;
+}
+@keyframes popKiss {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(1) translateY(-20px); opacity: 0; }
+}
+
+.floating-heart {
+    position: fixed; color: rgba(255, 255, 255, 0.75);
+    font-size: 1.3rem; pointer-events: none; z-index: 35;
+    animation: floatUp 4s linear forwards;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.8); opacity: 0; }
+    20% { opacity: 0.85; }
+    100% { transform: translateY(-130px) scale(1.2); opacity: 0; }
 }
 
 /* =========================
@@ -238,98 +295,62 @@ body {
     transition: opacity 1s ease, transform 1s ease;
 }
 
-.choice-container.show {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
+.choice-container.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-.btn-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    flex: 1;
-}
+.btn-group { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
 
 .apple-button {
-    width: 100%;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 50px;
-    background: #ffffff;
-    color: #0b1329;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    width: 100%; padding: 14px 20px; border: none; border-radius: 50px;
+    background: #ffffff; color: #0b1329; font-size: 0.95rem; font-weight: 500;
+    cursor: pointer; box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.apple-button:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
-}
+.apple-button:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2); }
+.kiss-btn { background: #ffb3d9; color: #4a0026; }
 
-.kiss-btn {
-    background: #ffb3d9;
-    color: #4a0026;
-}
-
-.micro-text {
-    font-size: 0.72rem;
-    color: rgba(255, 255, 255, 0.45);
-    font-weight: 300;
-    line-height: 1.3;
-}
+.micro-text { font-size: 0.72rem; color: rgba(255, 255, 255, 0.45); font-weight: 300; line-height: 1.3; }
 
 /* =========================
-   FOOTER & SOUND BUTTON
+   FINAL SECTION & EASTER EGG
 ========================= */
-.footer-sign {
-    margin-top: 35px;
-    opacity: 0.5;
-    font-size: 0.85rem;
+.final-section { display: none; opacity: 0; transition: opacity 2s ease; margin-top: 15px; }
+.final-section.show { display: block; opacity: 1; }
+
+.footer-sign { opacity: 0.55; font-size: 0.85rem; transition: opacity 0.5s ease; }
+.footer-sign:hover { opacity: 0.9; }
+
+.footer-easter { position: fixed; bottom: 18px; text-align: center; z-index: 30; }
+.easter-btn {
+    background: transparent; border: none; color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem; cursor: pointer; transition: color 0.3s ease;
+}
+.easter-btn:hover { color: rgba(255, 255, 255, 0.85); }
+
+.easter-overlay {
+    position: fixed; inset: 0; background: rgba(3, 7, 18, 0.92);
+    backdrop-filter: blur(14px); display: flex; justify-content: center;
+    align-items: center; z-index: 100; opacity: 0; pointer-events: none;
     transition: opacity 0.5s ease;
 }
+.easter-overlay.active { opacity: 1; pointer-events: auto; }
+.easter-content { width: 85%; max-width: 420px; padding: 35px 25px; text-align: center; }
+.easter-content h2 { font-size: 1.4rem; margin-bottom: 12px; }
+#easterVisual { font-size: 1.4rem; margin: 15px 0; line-height: 1.8; word-break: break-all; }
+#easterText { font-size: 0.95rem; margin-bottom: 20px; color: rgba(255, 255, 255, 0.85); font-weight: 300; }
 
-.footer-sign:hover {
-    opacity: 0.85;
-}
-
-.footer-sign h3 {
-    font-weight: 500;
-    margin-top: 2px;
-}
-
+/* Sound Button */
 .sound-button {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    color: #ffffff;
-    font-size: 0.8rem;
-    cursor: pointer;
-    z-index: 50;
+    position: fixed; right: 20px; bottom: 20px; padding: 10px 20px;
+    border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px);
+    color: #ffffff; font-size: 0.8rem; cursor: pointer; z-index: 50;
     transition: all 0.3s ease;
 }
+.sound-button:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
 
-.sound-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
 @media (max-width: 600px) {
     .card { padding: 35px 22px; }
     .hero-card h1 { font-size: 1.6rem; }
-    .message { font-size: 1rem; }
-    .choice-container { flex-direction: column; gap: 20px; }
-    .btn-group { width: 100%; }
+    .choice-container { flex-direction: column; gap: 18px; }
 }
