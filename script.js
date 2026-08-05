@@ -47,13 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerEl = document.getElementById("timer");
     const finalSection = document.getElementById("finalSection");
     const kissContainer = document.getElementById("kissContainer");
-    const photoContainer = document.getElementById("photoContainer");
-    const scenePhoto = document.getElementById("scenePhoto");
 
-    // Audio Context Setup
+    // Audio Context & Voice Audio Setup
     let audioCtx = null, rainGain = null, heartbeatInterval = null, isPlaying = false;
     const soundButton = document.getElementById("soundButton");
     const rainSound = document.getElementById("rainSound");
+
+    // Audio Suara "Aku Sayang Kamu"
+    const voiceSayang = new Audio("sayang.mp3");
 
     function initAudio() {
         if (!audioCtx) {
@@ -62,6 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (audioCtx.state === 'suspended') {
             audioCtx.resume();
+        }
+    }
+
+    function playVoiceSayang() {
+        if (voiceSayang) {
+            voiceSayang.play().catch(e => console.log("Voice autoplay prevented:", e));
         }
     }
 
@@ -199,16 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => kiss.remove(), 2000);
     }
 
-    // Helper Foto
-    function showPhoto(imgSrc) {
-        if (scenePhoto) scenePhoto.src = imgSrc;
-        if (photoContainer) photoContainer.classList.add("show");
-    }
-
-    function hidePhoto() {
-        if (photoContainer) photoContainer.classList.remove("show");
-    }
-
     // 4. OPENING TYPEWRITER SEQUENCE
     const openingScreen = document.getElementById("opening");
     const heroCard = document.getElementById("heroCard");
@@ -249,8 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             await showText("Mendekat ya...", 1000);
 
-            showPhoto("peluk.jpg");
-
             document.body.classList.add("hugging");
             triggerVibration();
 
@@ -289,7 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
             timerEl.innerHTML = "";
 
             await showText("Udah agak mendingan?", 2000);
-            hidePhoto();
             await showText("Kalau belum...", 1800);
             await showText("Aku masih di sini. 🤍", 1000);
 
@@ -307,8 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("pink-bg");
 
             await showText("Tutup mata bentar ya... 💋", 2000);
-
-            showPhoto("cium.jpg");
 
             spawnKiss(30, 40);
             await new Promise(r => setTimeout(r, 800));
@@ -331,14 +323,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             document.body.classList.remove("pink-bg");
-            hidePhoto();
             kissBtn.innerHTML = "💋 Cium Lagi";
             choiceContainer.classList.add("show");
             runFinalLetter();
         };
     }
 
-    // 7. FINAL LETTER
+    // 7. FINAL LETTER (DENGAN REKAMAN SUARA KAMU)
     async function runFinalLetter() {
         const letterTexts = [
             "Sayang...",
@@ -354,6 +345,9 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let lt of letterTexts) {
             await showText(lt, 2600);
         }
+
+        // Putar suara rekamannya pas tulisan akhir selesai
+        playVoiceSayang();
 
         msgEl.innerHTML = "";
         finalSection.classList.add("show");
