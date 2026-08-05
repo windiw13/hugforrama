@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    document.title = "For Rama 🤍";
+    document.title = "For Sayang 🤍";
 
     // 1. GENERATE 300 STARS AUTOMATICALLY
     const starsContainer = document.getElementById("stars");
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- SFX 1: SUARA DETAK JANTUNG (DEG-DEGAN) ---
+    // SFX: DETAK JANTUNG
     function playHeartbeatSound() {
         initAudio();
         if (!audioCtx) return;
@@ -85,13 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const now = audioCtx.currentTime;
-        // Detak 1 (Lub)
         playThump(65, now, 0.15, 0.18);
-        // Detak 2 (Dub)
         playThump(50, now + 0.18, 0.22, 0.14);
     }
 
-    // --- SFX 2: SUARA KISS / KECUPAN ---
+    // SFX: KECUPAN POP
     function playKissSound() {
         initAudio();
         if (!audioCtx) return;
@@ -101,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const now = audioCtx.currentTime;
 
         osc.type = 'sine';
-        // Pitch sweep dari frekuensi rendah naik cepat ke tinggi (efek pop kecupan)
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
 
@@ -193,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function spawnKiss(x, y) {
-        playKissSound(); // Mainkan SFX kecupan saat ikon muncul
+        playKissSound();
         const kiss = document.createElement("div");
         kiss.className = "kiss-mark";
         kiss.innerHTML = "💋";
@@ -207,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const openingScreen = document.getElementById("opening");
     const heroCard = document.getElementById("heroCard");
     const introSentences = [
-        "Hai, Rama. 🤍",
+        "Hai, Sayang. 🤍",
         "Hari ini mungkin cukup berat ya.",
         "Aku memang nggak bisa selalu ada di samping kamu.",
         "Tapi aku mau nemenin kamu sebentar.",
@@ -234,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(startIntroSequence, 2000);
 
-    // 5. HUG SCENE (DENGAN SUARA DEG-DEGAN BERULANG)
+    // 5. HUG SCENE
     if (hugBtn) {
         hugBtn.onclick = async function() {
             initAudio();
@@ -246,7 +243,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("hugging");
             triggerVibration();
 
-            // Mulai detak jantung setiap 1.4 detik (ritme tenang & hangat)
             playHeartbeatSound();
             heartbeatInterval = setInterval(playHeartbeatSound, 1400);
 
@@ -275,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             clearInterval(cd);
             clearInterval(heartSpawner);
-            clearInterval(heartbeatInterval); // Hentikan detak jantung saat pelukan selesai
+            clearInterval(heartbeatInterval);
             triggerVibration();
 
             document.body.classList.remove("hugging");
@@ -291,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 6. KISS SCENE (DENGAN EFEK KECUPAN POP)
+    // 6. KISS SCENE
     if (kissBtn) {
         kissBtn.onclick = async function() {
             initAudio();
@@ -330,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 7. FINAL LETTER
     async function runFinalLetter() {
         const letterTexts = [
-            "Rama...",
+            "Sayang...",
             "Makasih ya...",
             "Udah bertahan sejauh ini.",
             "Aku bangga sama kamu.",
@@ -383,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 playKissSound();
                 easterTitle.innerHTML = "Yaudah deh... 💋";
                 easterVisual.innerHTML = "💋💋💋💋💋💋💋💋<br>💋💋💋💋💋💋💋💋";
-                easterText.innerHTML = "Bonus 1000 cium buat Rama. Jangan protes ya. 😂🤍";
+                easterText.innerHTML = "Bonus 1000 cium buat Sayang. Jangan protes ya. 😂🤍";
                 easterActionBtn.innerHTML = "Tutup 🤍";
             } else {
                 easterOverlay.classList.remove("active");
