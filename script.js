@@ -48,16 +48,75 @@ document.addEventListener("DOMContentLoaded", () => {
     const finalSection = document.getElementById("finalSection");
     const kissContainer = document.getElementById("kissContainer");
 
-    // Audio Context Setup (Rain & Heartbeat)
+    // Audio Context Setup (Rain, Heartbeat & Kiss SFX)
     let audioCtx = null, rainGain = null, heartbeatInterval = null, isPlaying = false;
     const soundButton = document.getElementById("soundButton");
     const rainSound = document.getElementById("rainSound");
 
     function initAudio() {
-        if (audioCtx) return;
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        audioCtx = new AudioContext();
+        if (!audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
 
+    // --- SFX 1: SUARA DETAK JANTUNG (DEG-DEGAN) ---
+    function playHeartbeatSound() {
+        initAudio();
+        if (!audioCtx) return;
+
+        const playThump = (freq, time, duration, volume) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, time);
+            osc.frequency.exponentialRampToValueAtTime(15, time + duration);
+            
+            gain.gain.setValueAtTime(volume, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            osc.stop(time + duration);
+        };
+
+        const now = audioCtx.currentTime;
+        // Detak 1 (Lub)
+        playThump(65, now, 0.15, 0.18);
+        // Detak 2 (Dub)
+        playThump(50, now + 0.18, 0.22, 0.14);
+    }
+
+    // --- SFX 2: SUARA KISS / KECUPAN ---
+    function playKissSound() {
+        initAudio();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const now = audioCtx.currentTime;
+
+        osc.type = 'sine';
+        // Pitch sweep dari frekuensi rendah naik cepat ke tinggi (efek pop kecupan)
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.08);
+    }
+
+    // Rain Sound Synthesizer
+    function initWebAudioRain() {
         const bufferSize = 2 * audioCtx.sampleRate;
         const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const output = noiseBuffer.getChannelData(0);
@@ -80,30 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
         whiteNoise.start();
     }
 
-    function playHeartbeatSound() {
-        if (!audioCtx) return;
-        const playThump = (freq, time, duration) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, time);
-            osc.frequency.exponentialRampToValueAtTime(20, time + duration);
-            gain.gain.setValueAtTime(0.09, time);
-            gain.gain.exponentialRampToValueAtTime(0.001, time + duration);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(time);
-            osc.stop(time + duration);
-        };
-        const now = audioCtx.currentTime;
-        playThump(58, now, 0.18);
-        playThump(48, now + 0.22, 0.22);
-    }
-
     function toggleRain() {
         initAudio();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
         if (!isPlaying) {
             if (rainSound) {
                 rainSound.play().then(() => {
@@ -111,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     soundButton.style.background = "rgba(59, 130, 246, 0.4)";
                     isPlaying = true;
                 }).catch(() => {
+                    initWebAudioRain();
                     rainGain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 2);
                     soundButton.innerHTML = "🌧️ Suara Hujan ON";
                     soundButton.style.background = "rgba(59, 130, 246, 0.4)";
@@ -155,6 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function spawnKiss(x, y) {
+        playKissSound(); // Mainkan SFX kecupan saat ikon muncul
         const kiss = document.createElement("div");
         kiss.className = "kiss-mark";
         kiss.innerHTML = "💋";
@@ -195,9 +234,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(startIntroSequence, 2000);
 
-    // 5. BUILD 2: HUG SCENE LOGIC
+    // 5. HUG SCENE (DENGAN SUARA DEG-DEGAN BERULANG)
     if (hugBtn) {
         hugBtn.onclick = async function() {
+            initAudio();
             choiceContainer.classList.remove("show");
             if (!isPlaying) toggleRain();
 
@@ -206,10 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("hugging");
             triggerVibration();
 
-            setTimeout(() => {
-                playHeartbeatSound();
-                heartbeatInterval = setInterval(playHeartbeatSound, 2800);
-            }, 2500);
+            // Mulai detak jantung setiap 1.4 detik (ritme tenang & hangat)
+            playHeartbeatSound();
+            heartbeatInterval = setInterval(playHeartbeatSound, 1400);
 
             const hugTexts = [
                 "Sini...",
@@ -236,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             clearInterval(cd);
             clearInterval(heartSpawner);
-            clearInterval(heartbeatInterval);
+            clearInterval(heartbeatInterval); // Hentikan detak jantung saat pelukan selesai
             triggerVibration();
 
             document.body.classList.remove("hugging");
@@ -252,9 +291,10 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 6. BUILD 2: KISS SCENE LOGIC (REVISI: TANPA TELEPORT)
+    // 6. KISS SCENE (DENGAN EFEK KECUPAN POP)
     if (kissBtn) {
         kissBtn.onclick = async function() {
+            initAudio();
             choiceContainer.classList.remove("show");
             document.body.classList.add("pink-bg");
 
@@ -264,10 +304,10 @@ document.addEventListener("DOMContentLoaded", () => {
             await new Promise(r => setTimeout(r, 800));
             spawnKiss(70, 40);
 
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 12; i++) {
                 setTimeout(() => {
                     spawnKiss(Math.random() * 80 + 10, Math.random() * 80 + 10);
-                }, i * 180);
+                }, i * 220);
             }
 
             const kissTexts = [
@@ -287,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 7. BUILD 2: FINAL LETTER
+    // 7. FINAL LETTER
     async function runFinalLetter() {
         const letterTexts = [
             "Rama...",
@@ -308,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
         finalSection.classList.add("show");
     }
 
-    // 8. BUILD 2: EASTER EGG MULTI-STAGE
+    // 8. EASTER EGG MULTI-STAGE
     const easterBtn = document.getElementById("easterBtn");
     const easterOverlay = document.getElementById("easterOverlay");
     const easterTitle = document.getElementById("easterTitle");
@@ -320,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (easterBtn) {
         easterBtn.onclick = () => {
+            initAudio();
             easterStage = 1;
             easterTitle.innerHTML = "Kamu bandel ya.";
             easterVisual.innerHTML = "";
@@ -339,6 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 easterActionBtn.innerHTML = "Masih Mau Cium? 💋";
             } else if (easterStage === 2) {
                 easterStage = 3;
+                playKissSound();
                 easterTitle.innerHTML = "Yaudah deh... 💋";
                 easterVisual.innerHTML = "💋💋💋💋💋💋💋💋<br>💋💋💋💋💋💋💋💋";
                 easterText.innerHTML = "Bonus 1000 cium buat Rama. Jangan protes ya. 😂🤍";
