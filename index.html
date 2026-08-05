@@ -1,49 +1,111 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>For Rama 🤍</title>
+    <title>For Rama 🤍</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="stars"></div>
+    <!-- Background -->
+    <div class="aurora aurora-blue"></div>
+    <div class="aurora aurora-purple"></div>
 
-<div class="aurora"></div>
+    <div id="stars"></div>
 
-<div class="container">
+    <div class="shooting-star"></div>
 
-<div class="card">
+    <!-- Mouse Glow -->
+    <div class="mouse-glow"></div>
 
-<h1>Hai, Rama 🤍</h1>
 
-<p id="typing"></p>
+    <!-- Opening Screen -->
+    <section class="opening" id="opening">
 
-<div class="buttons">
+        <div class="typing-box">
 
-<button id="hugBtn">
-🤍 Peluk Aku
-</button>
+            <div class="avatar">
+                🤍
+            </div>
 
-<button id="kissBtn">
-💋 Cium Aku
-</button>
+            <p id="openingText">
+                Diw sedang mengetik...
+            </p>
 
-</div>
+            <div class="typing-dot">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </section>
+
+
+
+    <!-- Main Content -->
+    <main class="container" id="mainContent">
+
+
+        <section class="card hero-card">
+
+            <h1>
+                Untuk Rama 🤍
+            </h1>
+
+
+            <p class="message">
+                Ada seseorang yang ingin mengatakan sesuatu
+                lewat halaman kecil ini.
+            </p>
+
+
+            <button class="apple-button" id="startButton">
+                Buka Pesan ✨
+            </button>
+
+
+        </section>
+
+
+
+        <section class="card hidden-message">
+
+            <h2>
+                Terima kasih sudah hadir
+            </h2>
+
+
+            <p>
+                Mungkin tidak banyak yang bisa diberikan,
+                tapi ada seseorang yang selalu berharap
+                kamu baik-baik saja.
+            </p>
+
+
+        </section>
+
+
+
+        <!-- Sound -->
+        <button class="sound-button" id="soundButton">
+            🌧️ Hujan OFF
+        </button>
+
+
+        <audio id="rainSound" loop>
+            <source src="rain.mp3" type="audio/mpeg">
+        </audio>
+
+
+    </main>
+
+
 
 <script src="script.js"></script>
 
