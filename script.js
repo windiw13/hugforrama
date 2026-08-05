@@ -47,8 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerEl = document.getElementById("timer");
     const finalSection = document.getElementById("finalSection");
     const kissContainer = document.getElementById("kissContainer");
+    const photoContainer = document.getElementById("photoContainer");
+    const scenePhoto = document.getElementById("scenePhoto");
 
-    // Audio Context Setup (Rain, Heartbeat & Kiss SFX)
+    // Audio Context Setup
     let audioCtx = null, rainGain = null, heartbeatInterval = null, isPlaying = false;
     const soundButton = document.getElementById("soundButton");
     const rainSound = document.getElementById("rainSound");
@@ -63,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // SFX: DETAK JANTUNG
     function playHeartbeatSound() {
         initAudio();
         if (!audioCtx) return;
@@ -89,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
         playThump(50, now + 0.18, 0.22, 0.14);
     }
 
-    // SFX: KECUPAN POP
     function playKissSound() {
         initAudio();
         if (!audioCtx) return;
@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
         osc.stop(now + 0.08);
     }
 
-    // Rain Sound Synthesizer
     function initWebAudioRain() {
         const bufferSize = 2 * audioCtx.sampleRate;
         const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -200,6 +199,16 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => kiss.remove(), 2000);
     }
 
+    // Helper Foto
+    function showPhoto(imgSrc) {
+        if (scenePhoto) scenePhoto.src = imgSrc;
+        if (photoContainer) photoContainer.classList.add("show");
+    }
+
+    function hidePhoto() {
+        if (photoContainer) photoContainer.classList.remove("show");
+    }
+
     // 4. OPENING TYPEWRITER SEQUENCE
     const openingScreen = document.getElementById("opening");
     const heroCard = document.getElementById("heroCard");
@@ -240,6 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             await showText("Mendekat ya...", 1000);
 
+            showPhoto("peluk.jpg");
+
             document.body.classList.add("hugging");
             triggerVibration();
 
@@ -278,6 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
             timerEl.innerHTML = "";
 
             await showText("Udah agak mendingan?", 2000);
+            hidePhoto();
             await showText("Kalau belum...", 1800);
             await showText("Aku masih di sini. 🤍", 1000);
 
@@ -295,6 +307,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.add("pink-bg");
 
             await showText("Tutup mata bentar ya... 💋", 2000);
+
+            showPhoto("cium.jpg");
 
             spawnKiss(30, 40);
             await new Promise(r => setTimeout(r, 800));
@@ -317,6 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             document.body.classList.remove("pink-bg");
+            hidePhoto();
             kissBtn.innerHTML = "💋 Cium Lagi";
             choiceContainer.classList.add("show");
             runFinalLetter();
@@ -342,48 +357,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
         msgEl.innerHTML = "";
         finalSection.classList.add("show");
-    }
-
-    // 8. EASTER EGG MULTI-STAGE
-    const easterBtn = document.getElementById("easterBtn");
-    const easterOverlay = document.getElementById("easterOverlay");
-    const easterTitle = document.getElementById("easterTitle");
-    const easterVisual = document.getElementById("easterVisual");
-    const easterText = document.getElementById("easterText");
-    const easterActionBtn = document.getElementById("easterActionBtn");
-
-    let easterStage = 0;
-
-    if (easterBtn) {
-        easterBtn.onclick = () => {
-            initAudio();
-            easterStage = 1;
-            easterTitle.innerHTML = "Kamu bandel ya.";
-            easterVisual.innerHTML = "";
-            easterText.innerHTML = "";
-            easterActionBtn.innerHTML = "🤍 Peluk Lagi!!";
-            easterOverlay.classList.add("active");
-        };
-    }
-
-    if (easterActionBtn) {
-        easterActionBtn.onclick = () => {
-            if (easterStage === 1) {
-                easterStage = 2;
-                easterTitle.innerHTML = "Peluknya Nggak Ada Batas 🤍";
-                easterVisual.innerHTML = "🤍🤍🤍🤍🤍🤍🤍🤍<br>🤍🤍🤍🤍🤍🤍🤍🤍";
-                easterText.innerHTML = "Selama kamu butuh, selama itu juga aku ada.";
-                easterActionBtn.innerHTML = "Masih Mau Cium? 💋";
-            } else if (easterStage === 2) {
-                easterStage = 3;
-                playKissSound();
-                easterTitle.innerHTML = "Yaudah deh... 💋";
-                easterVisual.innerHTML = "💋💋💋💋💋💋💋💋<br>💋💋💋💋💋💋💋💋";
-                easterText.innerHTML = "Bonus 1000 cium buat Sayang. Jangan protes ya. 😂🤍";
-                easterActionBtn.innerHTML = "Tutup 🤍";
-            } else {
-                easterOverlay.classList.remove("active");
-            }
-        };
     }
 });
