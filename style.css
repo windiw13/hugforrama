@@ -354,3 +354,7 @@ body.hugging .arm-wrapper.right { transform: translateX(-92%); }
     .hero-card h1 { font-size: 1.6rem; }
     .choice-container { flex-direction: column; gap: 18px; }
 }
+/* Sembunyikan kontainer foto secara permanen */
+.photo-container, #photoContainer {
+    display: none !important;
+}
